@@ -8,7 +8,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.taobao.pamirs.schedule.IScheduleTaskDealSingle;
+import com.taobao.pamirs.schedule.IScheduleTaskDealMulti;
 import com.taobao.pamirs.schedule.TaskItemDefine;
 
 /**
@@ -17,8 +17,8 @@ import com.taobao.pamirs.schedule.TaskItemDefine;
  * @author xuannan
  *
  */
-public class DemoTaskBean implements IScheduleTaskDealSingle<Long> {
-	protected static transient Logger log = LoggerFactory.getLogger(DemoTaskBean.class);
+public class DemoTaskBeanMulti implements IScheduleTaskDealMulti<Long> {
+	protected static transient Logger log = LoggerFactory.getLogger(DemoTaskBeanMulti.class);
 
 	public Comparator<Long> getComparator() {
 		return new Comparator<Long>() {
@@ -40,7 +40,7 @@ public class DemoTaskBean implements IScheduleTaskDealSingle<Long> {
 		String message = "获取数据...[ownSign=" + ownSign + ",taskParameter=\"" + taskParameter +"\"]:";
 		boolean isFirst = true;
 		for (TaskItemDefine s : queryCondition) {
-			long taskItem = Integer.parseInt(s.getTaskItemId()) * 10000000L;
+			long taskItem = Long.parseLong(s.getTaskItemId()) * 10000000L;
 			for (int i = 0; i < num; i++) {
 				result.add(taskItem + random.nextLong()% 100000L);
 			}
@@ -54,10 +54,10 @@ public class DemoTaskBean implements IScheduleTaskDealSingle<Long> {
 		log.info(message);
 		return result;
 	}
-
-	public boolean execute(Long task, String ownSign) throws Exception {
+	public boolean execute(Long[] tasks, String ownSign) throws Exception {
 		Thread.sleep(50);
-		log.info("处理任务["+ownSign+"]:" + task);
+		//log.info("处理任务["+ownSign+"]:" + task);
 		return true;
 	}
+
 }

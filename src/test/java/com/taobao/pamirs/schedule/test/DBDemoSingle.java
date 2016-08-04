@@ -10,21 +10,21 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.taobao.pamirs.schedule.IScheduleTaskDealSingle;
 import com.taobao.pamirs.schedule.TaskItemDefine;
 
 /**
- * µ¥¸öÈÎÎñ´¦ÀíÊµÏÖ
- * 
+ * å•ä¸ªä»»åŠ¡å¤„ç†å®ç°
+ *
  * @author xuannan
- * 
+ *
  */
 public class DBDemoSingle implements	IScheduleTaskDealSingle<Long> {
-	
-	private static transient Log log = LogFactory.getLog(DBDemoSingle.class);
+
+	private static transient Logger log = LoggerFactory.getLogger(DBDemoSingle.class);
 
 	protected DataSource dataSource;
 
@@ -41,7 +41,7 @@ public class DBDemoSingle implements	IScheduleTaskDealSingle<Long> {
 	}
 
 	public List<Long> selectTasks(String taskParameter, String ownSign, int taskItemNum,
-			List<TaskItemDefine> queryCondition, int fetchNum) throws Exception {
+								  List<TaskItemDefine> queryCondition, int fetchNum) throws Exception {
 		List<Long> result = new ArrayList<Long>();
 		if (queryCondition.size() == 0) {
 			return result;
@@ -71,7 +71,7 @@ public class DBDemoSingle implements	IScheduleTaskDealSingle<Long> {
 						+ condition.toString() + ") and sts ='N' LIMIT "
 						+ fetchNum;
 			} else {
-				throw new Exception("²»Ö§³ÖµÄÊı¾İ¿âÀàĞÍ£º" + dbType);
+				throw new Exception("ä¸æ”¯æŒçš„æ•°æ®åº“ç±»å‹ï¼š" + dbType);
 			}
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet set = statement.executeQuery();
@@ -99,10 +99,10 @@ public class DBDemoSingle implements	IScheduleTaskDealSingle<Long> {
 			statement.executeUpdate();
 			statement.close();
 			conn.commit();
-			log.debug("´¦ÀíÈÎÎñ£º" + id + " ³É¹¦£¡");
+			log.debug("å¤„ç†ä»»åŠ¡ï¼š" + id + " æˆåŠŸï¼");
 			return true;
 		} catch (Exception e) {
-			log.error("Ö´ĞĞÈÎÎñ£º" + task + "Ê§°Ü£º" + e.getMessage(), e);
+			log.error("æ‰§è¡Œä»»åŠ¡ï¼š" + task + "å¤±è´¥ï¼š" + e.getMessage(), e);
 			if (conn != null) {
 				conn.rollback();
 			}
